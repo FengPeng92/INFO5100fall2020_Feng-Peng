@@ -9,14 +9,14 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-public class WQUAlternative1Test {
+public class WQU_BySizeTest {
 
     /**
      *
      */
     @Test
     public void testFind0() {
-        WQU_Alternative1 h = new WQU_Alternative1(10);
+        WQU_ByDepth h = new WQU_ByDepth(10);
         assertEquals(0, h.find(0));
     }
 
@@ -25,7 +25,7 @@ public class WQUAlternative1Test {
      */
     @Test
     public void testFind1() {
-        WQU_Alternative1 h = new WQU_Alternative1(10);
+        WQU_ByDepth h = new WQU_ByDepth(10);
         h.union(0, 1);
         assertEquals(0, h.find(0));
         assertEquals(0, h.find(1));
@@ -36,7 +36,7 @@ public class WQUAlternative1Test {
      */
     @Test
     public void testFind2() {
-        WQU_Alternative1 h = new WQU_Alternative1(10);
+        WQU_ByDepth h = new WQU_ByDepth(10);
         h.union(0, 1);
         assertEquals(0, h.find(0));
         assertEquals(0, h.find(1));
@@ -52,7 +52,7 @@ public class WQUAlternative1Test {
     @SuppressWarnings("Duplicates")
     @Test
     public void testFind3() {
-        WQU_Alternative1 h = new WQU_Alternative1(10);
+        WQU_ByDepth h = new WQU_ByDepth(10);
         h.union(0, 1);
         h.union(0, 2);
         h.union(3, 4);
@@ -78,7 +78,7 @@ public class WQUAlternative1Test {
     @SuppressWarnings("Duplicates")
     @Test
     public void testFind4() {
-        WQU_Alternative1 h = new WQU_Alternative1(10);
+        WQU_ByDepth h = new WQU_ByDepth(10);
         h.union(0, 1);
         h.union(0, 2);
         h.union(3, 4);
@@ -103,7 +103,7 @@ public class WQUAlternative1Test {
      */
     @Test
     public void testConnected01() {
-        WQU_Alternative1 h = new WQU_Alternative1(10);
+        WQU_BySize h = new WQU_BySize(10);
         assertFalse(h.connected(0, 1));
     }
 

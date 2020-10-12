@@ -4,11 +4,11 @@
 package edu.neu.coe.info6205.union_find;
 
 /**
- * Weighted Quick Union by depth(without path compression)
+ * Weighted Quick Union with Path Compression
  */
-public class WQU_Alternative1 {
-    private int[] parent;   // parent[i] = parent of i
-    private int[] depth;   // depth[i] = depth of subtree rooted at i
+public class WQU_TwoPath {
+    private final int[] parent;   // parent[i] = parent of i
+    private final int[] size;   // size[i] = size of subtree rooted at i
     private int count;  // number of components
 
     /**
@@ -19,20 +19,19 @@ public class WQU_Alternative1 {
      * @param n the number of sites
      * @throws IllegalArgumentException if {@code n < 0}
      */
-    public WQU_Alternative1(int n) {
+    public WQU_TwoPath(int n) {
         count = n;
         parent = new int[n];
-        depth = new int[n];
+        size = new int[n];
         for (int i = 0; i < n; i++) {
             parent[i] = i;
-            depth[i] = 0;
+            size[i] = 1;
         }
     }
 
-
     public void show() {
         for (int i = 0; i < parent.length; i++) {
-            System.out.printf("%d: %d, %d\n", i, parent[i], depth[i]);
+            System.out.printf("%d: %d, %d\n", i, parent[i], size[i]);
         }
     }
 
@@ -54,10 +53,16 @@ public class WQU_Alternative1 {
      */
     public int find(int p) {
         validate(p);
-        while (p != parent[p]) {
-            p = parent[p];
+        int root = p;
+        while (root != parent[root]) {
+            root = parent[root];
         }
-        return p;
+        while (p != root) {
+            int temp = parent[p];
+            parent[p] = root;
+            p = temp;
+        }
+        return root;
     }
 
     // validate that p is a valid index
@@ -96,15 +101,28 @@ public class WQU_Alternative1 {
         int rootQ = find(q);
         if (rootP == rootQ) return;
         // make smaller root point to larger one
-        if (depth[rootP] < depth[rootQ]) {
+        if (size[rootP] < size[rootQ]) {
             parent[rootP] = rootQ;
-        } else if (depth[rootP] > depth[rootQ]) {
-            parent[rootQ] = rootP;
+            size[rootQ] += size[rootP];
         } else {
             parent[rootQ] = rootP;
-            depth[rootP]++;
+            size[rootP] += size[rootQ];
         }
         count--;
+    }
+
+    public int getDepth() {
+        int depth = 0;
+        for (int i = 0; i < size.length; i++) {
+            int temp = i, current = 0;
+            while (temp != parent[temp]) {
+                temp = parent[temp];
+                current++;
+            }
+
+            depth = Math.max(depth, current);
+        }
+        return depth;
     }
 
 }

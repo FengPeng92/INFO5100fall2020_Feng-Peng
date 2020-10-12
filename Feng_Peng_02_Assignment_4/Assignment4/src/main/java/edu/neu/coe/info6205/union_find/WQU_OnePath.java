@@ -4,9 +4,9 @@
 package edu.neu.coe.info6205.union_find;
 
 /**
- * Weighted Quick Union with Path Compression
+ * Weighted Quick Union with Path Compression(One Path)
  */
-public class WQU_Alternative2 {
+public class WQU_OnePath {
     private final int[] parent;   // parent[i] = parent of i
     private final int[] size;   // size[i] = size of subtree rooted at i
     private int count;  // number of components
@@ -19,13 +19,13 @@ public class WQU_Alternative2 {
      * @param n the number of sites
      * @throws IllegalArgumentException if {@code n < 0}
      */
-    public WQU_Alternative2(int n) {
+    public WQU_OnePath(int n) {
         count = n;
         parent = new int[n];
         size = new int[n];
         for (int i = 0; i < n; i++) {
             parent[i] = i;
-            size[i] = 1;
+            size[i] = 0;
         }
     }
 
@@ -53,16 +53,11 @@ public class WQU_Alternative2 {
      */
     public int find(int p) {
         validate(p);
-        int root = p;
-        while (root != parent[root]) {
-            root = parent[root];
+        while (p != parent[p]) {
+            parent[p] = parent[parent[p]];
+            p = parent[p];
         }
-        while (p != root) {
-            int temp = parent[p];
-            parent[p] = root;
-            p = temp;
-        }
-        return root;
+        return p;
     }
 
     // validate that p is a valid index
@@ -109,6 +104,20 @@ public class WQU_Alternative2 {
             size[rootP] += size[rootQ];
         }
         count--;
+    }
+
+    public int getDepth() {
+        int depth = 0;
+        for (int i = 0; i < size.length; i++) {
+            int temp = i, current = 0;
+            while (temp != parent[temp]) {
+                temp = parent[temp];
+                current++;
+            }
+
+            depth = Math.max(depth, current);
+        }
+        return depth;
     }
 
 }
